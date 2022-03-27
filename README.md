@@ -6,21 +6,15 @@
  - Django 2 
 
 ## Functionality
-- Login and Registration: User's login and registration.
+- Login and Registration
 - Product browsing: Product pictures, price, type, introduction and stock information.
-- Full-text search: support the search of commodity types, commodity names and profiles.
 - User Center: Support the update of user's personal information, delivery address and other information, add products to shopping carts, and generate orders.
-- Background management: Support background management functions for example increase, update and delete commodity and user information, customize styles and functions, log, and manage and assign permissions.
-
 
 ## Setup
 **Install dependencies**: `pip install -Ur requirements.txt`
 
 ## Database
-Use default database `sqlite` when creating the `Django` project 
-
-## Create superuser
-`python manage.py createsuperuser`
+Use default database `sqlite` when creating the `Django` project
 
 ## Run server
 
