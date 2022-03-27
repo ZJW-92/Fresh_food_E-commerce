@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<script>
+
+    $(function () {
+        total();
+        {#    choose all or remove all #}
+        $('#check_all').click(function () {
+    {#        get current state #}
+
+            state=$(this).prop('checked');
+            $(':checkbox:not(#ckeck_all)').prop('checked',state)
+        });
+
+        $(':checkbox:not(#check_all)').click(function () {
+            if($(this).prop('checked')){
+{#                alert($(':checked').length);#}
+                if($(':checked').length+1==$(':checkbox').length){
+                    $('#ckeck_all').prop('checked',true);
+                }
+            }
+            else{
+                $('#check_all').prop('checked',false)
+            }
+        });
+
+        $('.add').click(function () {
+
+            txt=$(this).next();
+            txt.val(parseFloat(txt.val())+1).blur();
+
+        });
+         $('.minus').click(function () {
+            txt=$(this).prev();
+             txt.val(parseFloat(txt.val())-1).blur()
+        });
+
+        $('.num_show').blur(function () {
+            count=parseFloat($(this).val());
+            kucun=parseFloat($(this).attr('kucun'));
+            if(count<1){
+                alert('Amount cannot be zero');
+                $(this).val(1);
+                count = 1;
+                $(this).focus();
+                return;
+            }
+            else if(count>kucun){
+             alert('Amount exceeds stock ');
+             $(this).val(kucun);
+             count = kucun;
+             $(this).focus();
+             return;
+            }
+
+            cart_id = $(this).parents('.cart_list_td').attr('id');
+            $.get('/cart/edit'+cart_id+'_'+count+'/',function (data) {
+                if(data.count==0){
+                    total();
+                }
+                else {
+                    $(this).val(data.count)
+                }
+            })
+        })
+    });
+    function cart_del(cart_id) {
+            del = confirm('delete');
+{#            cart_id = $(this).parents('.cart_list_td').attr('id');#}
+{#            alert(cart_id);#}
+            if(del){
+                $.get('/cart/delete'+cart_id+'/',function (data) {
+{#                    alert(data.ok);#}
+                    if(data.ok==1){
+                        $('ul').remove('#'+cart_id);
+                        total();
+                    }
+                })
+            }
+        }
+    function total(){
+        total1=0;
+        total_count=0;
+
+            $('.col07').each(
+                function () {
+
+                //get amount
+                count=$(this).prev().find('input').val();
+                //get price per unit
+                price = $(this).prev().prev().text();
+                //calculate single price
+                total0=parseFloat(count)*parseFloat(price);
+                    $(this).text(total0.toFixed(2));
+                //add to total price
+                total1 += total0;
+                total_count++;
+            });
+            $('#total').text(total1.toFixed(2));
+            $('.total_count1').text(total_count);
+        }
+    function go_order() {
+        s = '';
+        $(':checked:not(#check_all)').each(function () {
+             id = $(this).parents('.cart_list_td').attr('id');
+
+             s = s +'cart_id='+id + '&'
+
+        });
+
+
+        s=s.substring(0,s.length-1);
+
+        location.href = '/order?'+s ;
+
+        }
+</script>
+{% endblock head %}
+
+{% block center_body %}
+	<div class="total_count">All commodities<em>{{ carts|length }}</em>件</div>
+	<ul class="cart_list_th clearfix">
+		<li class="col01">Commodity name</li>
+		<li class="col02">Comodity unit</li>
+		<li class="col03">Comodity price per unit</li>
+		<li class="col04">Amount</li>
+		<li class="col05">Total</li>
+		<li class="col06">Change</li>
+	</ul>
+
+    {% for cart in carts %}
+	<ul class="cart_list_td clearfix" id="{{ cart.id }}">
+		<li class="col01"><input type="checkbox" name="" id="check_goods" checked="checked"></li>
+		<li class="col02"><img src="{{ MEDIA_URL }}{{ cart.goods.gpic }}"></li>
+		<li class="col03">{{ cart.goods.gtitle }}<br><em>{{ cart.goods.gprice }}元/{{ cart.goods.gunit }}</em><br><em>库存：<span id="goods_kucun">{{ cart.goods.gkucun }}</span></em></li>
+		<li class="col04">{{ cart.goods.gunit }}</li>
+		<li class="col05">{{ cart.goods.gprice }}</li>
+		<li class="col06">
+			<div class="num_add">
+				<a href="javascript:;" class="add fl">+</a>
+				<input type="text" class="num_show fl" value="{{ cart.count }}" kucun="{{ cart.goods.gkucun }}">
+				<a href="javascript:;" class="minus fl">-</a>
+			</div>
+		</li>
+		<li class="col07"></li>
+		<li class="col08"><a href="javascript:cart_del({{ cart.id }});">删除</a></li>
+	</ul>
+    {% endfor %}
+
+	<ul class="settlements">
+		<li class="col01"><input type="checkbox" name="" checked="" id="check_all" href="javascript:;"></li>
+		<li class="col02">Choose all</li>
+		<li class="col03">Total(exclude feight )：<span>¥</span><em id="total"></em><br>共计<b class="total_count1"></b>items</li>
+		<li class="col04"><a href="javascript:go_order()">Go to payment</a></li>
+	</ul>
+
+{% endblock center_body %}
