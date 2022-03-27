@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block center_body %}
+    <div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>All commodity category</h1>
+				<span></span>
+				<ul class="subnav">
+					<li><a href="/list1_1_1/" class="fruit">Fruit</a></li>
+					<li><a href="/list2_1_1/" class="seafood">Seafood</a></li>
+					<li><a href="#" class="meet">Meat</a></li>
+					<li><a href="#" class="egg">Egg</a></li>
+					<li><a href="#" class="vegetables">Vegetable</a></li>
+					<li><a href="#" class="ice">Frozen food </a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="{% url "df_goods:index" %}">Home</a></li>
+				<li class="interval">|</li>
+				<li><a href="">Mobile app</a></li>
+				<li class="interval">|</li>
+				<li><a href="">Soon</a></li>
+			</ul>
+		</div>
+	</div>
+    <script type="text/javascript">
+        if({{ search_status }}==0){
+            alert("Your sesearch meets null commodity. ");
+        }
+    </script>
+	<div class="breadcrumb">
+		All category
+
+        > Details
+	</div>
+
+    <div class="main_wrap clearfix">
+        <ul class="goods_type_list clearfix">
+            {%  for item in page %}
+            <li>
+                <a href="/{{ item.id }}/"><img src="{{ MEDIA_URL }}{{ item.gpic }}"></a>
+                <h4><a href="/{{ item.id }}/">{{ item.gtitle }}</a></h4>
+                <div class="operate">
+                    <span class="prize">￥{{ item.gprice }}</span>
+                    <span class="unit">{{ item.gunit }}</span>
+                    <a href="/cart/add{{ item.id }}_1/" class="add_goods" title="加入购物车"></a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="pagenation">
+            {% if page.has_previous %}
+                <a href="{% url "df_user:ordinary_search" %}?q={{ query }}&amp;page={{ page.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            {% for pindex in paginator.page_range %}
+                {% if pindex == page.number %}
+                    <a href="#" class="active">{{ pindex }}</a>
+                {% else %}
+                    <a href="{% url "df_user:ordinary_search" %}?q={{ query }}&amp;page={{ pindex }}">{{ pindex }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page.has_next %}
+                <a href="{% url "df_user:ordinary_search" %}?q={{ query }}&amp;page={{ page.next_page_number }}">Next></a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock center_body %}

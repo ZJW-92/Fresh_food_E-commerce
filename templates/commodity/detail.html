@@ -1,0 +1,174 @@
+{% extends 'df_goods/base.html' %}
+
+{% block head %}
+    <script type="text/javascript">
+
+{#  binding js event to increase commodity price with amount #}
+    function plus() {
+        num = parseFloat($('.num_show').val());
+        kucun = parseFloat($('.goods_kucun').html());
+        if(num<=kucun){
+            $('.num_show').val(num+1);
+            $('.num_show').blur();
+        }
+    }
+
+    function minus() {
+        num = parseFloat($('.num_show').val());
+        if(num>1)
+        {
+            $('.num_show').val(num-1);
+            $('.num_show').blur();
+        }
+        else {
+        }
+    }
+
+    $(function () {
+        $('.num_show').blur(function () {
+        num = parseInt($('.num_show').val());
+
+        if(num<=1)
+             num = 1;
+
+         kucun = parseInt($('.goods_kucun').text());
+
+         if(num>=kucun)
+             num = kucun;
+
+         price = parseFloat($('#gprice').text());
+         total = num*price;
+         $('.num_show').val(num);
+         $('#gtotal').text(total.toFixed(2)+'SEK');
+
+        });
+    });
+    </script>
+
+{% endblock head %}
+
+{% block center_content %}
+	<div class="goods_detail_con clearfix">
+		<div class="goods_detail_pic fl"><img src="{{ MEDIA_URL }}{{ goods.gpic }}"></div>
+
+		<div class="goods_detail_list fr">
+			<h3>{{ goods.gtitle }}</h3>
+			<p>{{ goods.gjianjie }}</p>
+			<div class="prize_bar">
+				<span class="show_pirze">¥<em id="gprice">{{ goods.gprice }}</em></span>
+				<span class="show_unit">Unit：{{ goods.gunit }}</span>
+				<span class="show_unit">Stock：<span class="goods_kucun">{{ goods.gkucun }}</span></span>
+			</div>
+			<div class="goods_num clearfix">
+				<div class="num_name fl">Amount：</div>
+				<div class="num_add fl">
+					<input type="text" class="num_show fl" value="1">
+					<a href="javascript:plus();" class="add fr">+</a>
+					<a href="javascript:minus();" class="minus fr">-</a>
+				</div>
+			</div>
+			<div class="total">总价：<em id="gtotal">{{ goods.gprice }}SEK</em></div>
+			<div class="operate_btn">
+                {% if request.session.user_name|default:'' != '' %}
+                    <a href="javascript:;" class="buy_btn" id="buy_now">Purchase now</a>
+                {% else %}
+                    <a href="{% url "df_user:login" %}" class="buy_btn">Purchase now</a>
+                {% endif %}
+                {% if request.session.user_name|default:'' != '' %}
+                    <a href="javascript:;" class="add_cart" id="add_cart">Add to cart</a>
+                {% else %}
+                    <a href="{% url "df_user:login" %}" class="add_cart" id="add_cart">Add to cart</a>
+                {% endif %}
+			</div>
+		</div>
+	</div>
+
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>Recommendation</h3>
+				<ul>
+                    {% for goods in news %}
+					<li>
+						<a href="/{{ goods.id }}"><img src="{{ MEDIA_URL }}{{ goods.gpic }}"></a>
+						<h4><a href="#">{{ goods.gtitle }}</a></h4>
+						<div class="prize">￥{{ goods.gprice }}</div>
+					</li>
+                    {%  endfor %}
+                </ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<ul class="detail_tab clearfix">
+				<li class="active">Overview</li>
+				<li>Comment</li>
+			</ul>
+
+			<div class="tab_content">
+				<dl>
+					<dt>Details：</dt>
+					<dd>{{ goods.gcontent|safe }}</dd>
+				</dl>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="add_jump"></div>
+
+	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript">
+    $(document).ready(function(){
+
+        $(".buy_btn").click(function () {
+            num = parseInt($('.num_show').val());
+            $.get('/cart/add{{ goods.id }}_'+num+'/',function (data) {
+                $('#show_count').text(data.count);
+            });
+            location.href = "/cart/";
+
+        });
+
+        $('#add_cart').click(function() {
+
+            var $add_x = $('#add_cart').offset().top;
+            var $add_y = $('#add_cart').offset().left;
+
+            var $to_x = $('#show_count').offset().top;
+            var $to_y = $('#show_count').offset().left;
+
+            $(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'});
+
+            $('#add_cart').click(function() {
+
+    {#            		    check if user is logged in #}
+                if ($('.login_btn').text().indexOf('Log in') >= 0) {
+                    alert('Please log in first.');
+                    location.href('/user/login/');
+                    return;
+                }
+
+
+                $(".add_jump").stop().animate({
+                        'left': $to_y + 7,
+                        'top': $to_x + 7
+                    },
+                    "fast", function () {
+                        $(".add_jump").fadeOut('fast', function () {
+                            count = $('.num_show').val();
+                            $('#show_count').html(count);
+                    });
+                });
+
+                num = parseInt($('.num_show').val());
+                $.get('/cart/add{{ goods.id }}_'+num+'/',function (data) {
+                    $('#show_count').text(data.count);
+                });
+            });
+        });
+
+    });
+	</script>
+
+{% endblock center_content %}

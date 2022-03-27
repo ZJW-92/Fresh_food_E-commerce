@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block center_body %}
+
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul>
+                <li><a href="{% url "df_user:info" %}">· Personal information</a></li>
+				<li><a href="{% url "df_user:order" 1 %}">· All orders</a></li>
+				<li><a href="{% url "df_user:site" %}" class="active">· Delivery address</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+				<h3 class="common_title2">Delivery address</h3>
+				<div class="site_con">
+					<dl>
+                        <dt>Username：{{ user.ushou }}</dt>
+                        <dt>Tel：{{ user.uphone }}</dt>
+                        <dt>Current address：{{ user.uaddress }}</dt>
+{#                        <a href="/user/place_order" style="display: block; width: 80px; height:30px; line-height: 30px; text-align: center;font-size: 13px; " class="info_submit">提交订单</a>#}
+					</dl>
+				</div>
+				<h3 class="common_title2">Edit address:</h3>
+				<div class="site_con">
+					<form action="{% url "df_user:site" %}" method="post">
+                        {% csrf_token %}
+						<div class="form_group">
+							<label>Recipient：</label>
+							<input type="text" name="ushou" value="{{ user.ushou }}">
+						</div>
+                        <div class="form_group">
+                            <label>Tel：</label>
+                            <input type="text" name="uphone" value="{{ user.uphone }}">
+                        </div>
+                        <div class="form_group">
+                            <label>Email：</label>
+                            <input type="text" name="uyoubian" value="{{ user.uyoubian }}">
+                        </div>
+                        <div class="form_group form_group2">
+                            <label>Address：</label>
+                            <textarea class="site_area" name="uaddress" >{{ user.uaddress }}</textarea>
+                        </div>
+						<input type="submit" name="" value="Edit address" class="info_submit">
+					</form>
+				</div>
+		</div>
+	</div>
+
+
+{% endblock center_body %}

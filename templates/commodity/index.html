@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/static/js/slide.js"></script>
+{% endblock head %}
+
+{% block center_body %}
+
+	<div class="navbar_con">
+		<div class="navbar">
+			<h1 class="fl">All commodity category</h1>
+			<ul class="navlist fl">
+				<li><a href="{% url "df_goods:index" %}">Home</a></li>
+				<li class="interval">|</li>
+				<li><a href="#">Mobile app</a></li>
+				<li class="interval">|</li>
+				<li><a href="#">Soon</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="center_con clearfix">
+		<ul class="subnav fl">
+			<li><a href="#model01" class="fruit">Fruit</a></li>
+			<li><a href="#model02" class="seafood">Seafood</a></li>
+			<li><a href="#model03" class="meet">Meat</a></li>
+			<li><a href="#model04" class="egg">Egg</a></li>
+			<li><a href="#model05" class="vegetables">Vegetable</a></li>
+			<li><a href="#model06" class="ice">Frozen food</a></li>
+		</ul>
+		<div class="slide fl">
+			<ul class="slide_pics">
+				<li><img src="/static/images/slide.jpg" alt="slide"></li>
+				<li><img src="/static/images/slide02.jpg" alt="slide"></li>
+				<li><img src="/static/images/slide03.jpg" alt="slide"></li>
+				<li><img src="/static/images/slide04.jpg" alt="slide"></li>
+			</ul>
+			<div class="prev"></div>
+			<div class="next"></div>
+			<ul class="points"></ul>
+		</div>
+		<div class="adv fl">
+			<a href="#"><img src="/static/images/adv01.jpg"></a>
+			<a href="#"><img src="/static/images/adv02.jpg"></a>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model01">Fruit</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+
+                {% for g in type01 %}
+                    <a href="/{{ g.id }}/">{{  g.gtitle|slice:'10' }}</a>
+
+                {%  endfor %}
+			</div>
+			<a href="/list1_1_1/" class="goods_more fr" id="fruit_more">More ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner01.jpg"></div>
+			<ul class="goods_list fl">
+
+                {% for goods in type0 %}
+
+                <li>
+                    <h4><a href="/{{ goods.id }}/">{{ goods.gtitle }}</a></h4>
+                    <a href="/{{ goods.id }}/"><img src="{{ MEDIA_URL }}{{ goods.gpic }}"></a>
+                    <div class="prize"> ￥ {{ goods.gprice }} </div>
+                </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model02">Seafood</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+
+                {% for g in type1 %}
+                    <a href="/{{ g.id }}/">{{ g.gtitle|slice:'10' }}</a>
+                {% endfor %}
+			</div>
+			<a href="/list2_1_1/" class="goods_more fr">More ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner02.jpg"></div>
+			<ul class="goods_list fl">
+                {% for goods in type11 %}
+                <li>
+                    <h4><a href="/{{ goods.id }}/">{{ goods.gtitle }}</a></h4>
+                    <a href="/{{ goods.id }}/"><img src="{{ MEDIA_URL }}{{ goods.gpic }}"></a>
+                    <div class="prize"> ￥ {{ goods.gprice }} </div>
+                </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model03">Meat</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+				<a href="#">Mongo</a>
+				<a href="#">Kiwi</a>
+				<a href="#">Avovado</a>
+			</div>
+			<a href="#" class="goods_more fr">More ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner03.jpg"></div>
+			<ul class="goods_list fl">
+				<li>
+					<h4><a href="#">Victoria grape</a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize">88.00 SEK</div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape</a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize">88.00 SEK</div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape</a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize"> 88.00 SEK</div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape</a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize"> 88.00 SEK</div>
+				</li>
+			</ul>
+		</div>
+
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model04">Egg</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+				<a href="#">Mongo</a>
+				<a href="#">Kiwi</a>
+				<a href="#">Avocade</a>
+			</div>
+			<a href="#" class="goods_more fr">More ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner04.jpg"></div>
+			<ul class="goods_list fl">
+				<li>
+					<h4><a href="#">Victoria grape </a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize">88.00 SEK</div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape</a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize">88.00 SEK</div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape </a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize">88.00 SEK</div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape</a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize"> 88.00 SEK</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model05">Vegetable</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+				<a href="#">Mongo</a>
+				<a href="#">Kiwi</a>
+				<a href="#">Avocade</a>
+			</div>
+			<a href="#" class="goods_more fr">More ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner05.jpg"></div>
+			<ul class="goods_list fl">
+				<li>
+					<h4><a href="#">Victoria grape</a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize"> 88.00 SEK </div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape</a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize"> 88.00 SEK </div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape</a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize"> 88.00 SEK </div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape</a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize"> 88.00 SEK</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model06">Frozen food</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+				<a href="#">Mongo</a>
+				<a href="#">Kiwi</a>
+				<a href="#">Avocado</a>
+			</div>
+			<a href="#" class="goods_more fr">More ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner06.jpg"></div>
+			<ul class="goods_list fl">
+				<li>
+					<h4><a href="#">Victoria grape</a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize"> 88.00 SEK </div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape </a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize"> 88.00 SEK </div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape </a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize"> 88.00 SEK </div>
+				</li>
+				<li>
+					<h4><a href="#">Victoria grape </a></h4>
+					<a href="#"><img src="/static/images/goods.jpg"></a>
+					<div class="prize"> 88.00 SEK</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="/static/js/slide.js"></script>
+    <script type="text/javascript">
+        BCSlideshow('focuspic');
+        var oFruit = document.getElementById('fruit_more');
+        var oShownum = document.getElementById('show_count');
+
+        var hasorder = localStorage.getItem('order_finish');
+
+        if(hasorder)
+        {
+        oShownum.innerHTML = '2';
+        }
+
+        oFruit.onclick = function(){
+        window.location.href = 'list.html';
+        }
+    </script>
+
+{% endblock center_body %}

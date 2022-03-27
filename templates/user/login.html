@@ -1,0 +1,71 @@
+{% extends 'base_foot.html' %}
+
+{% block head %}
+<script>
+    $(function () {
+        name_error = false;
+        pwd_error = false;
+
+        if({{ error_name }}==1){
+            $('.user_error').html('User name is wrong').show();
+        }
+        if({{ error_pwd }}==1){
+            $('.pwd_error').html('Password is wrong').show();
+        }
+        $('.name_input').blur(function () {
+            if($('.name_input').val().length=0){
+                $('.user_error').html('Please enter username').show();
+                name_error = false;
+            }else{
+                $('.user_error').hide();
+                name_error = true;
+            }
+        });
+        $('.pass_input').blur(function () {
+            if($('.pass_input').val().length=0){
+                $('.pwd_error').html('Please enter password').show();
+                pwd_error = false;
+            }else{
+                $('.pwd_error').hide();
+                pwd_error = true;
+            }
+        })
+    })
+</script>
+{% endblock head %}
+
+{% block body %}
+	<div class="login_top clearfix">
+		<a href="{% url "df_goods:index" %}" class="login_logo"><img src="/static/images/logo02.png"></a>
+	</div>
+
+	<div class="login_form_bg">
+		<div class="login_form_wrap clearfix">
+			<div class="login_banner fl"></div>
+			<div class="slogan fl">Fast delivery</div>
+			<div class="login_form fr">
+				<div class="login_title clearfix">
+					<h1>Log in</h1>
+					<a href="{% url "df_user:register" %}">Register</a>
+				</div>
+				<div class="form_input">
+					<form action="{% url "df_user:login_handle" %}" method="post">
+                        {% csrf_token %}
+						<input type="text" name="username" class="name_input" value="{{ username }}" placeholder="Enter username">
+						<div class="user_error">Username is wrong.</div>
+						<input type="password" name="pwd" class="pass_input" value="{{ password }}" placeholder="Enter password">
+{#
+						<div class="pwd_error">Password is wrong.</div>
+						<div class="more_input clearfix">
+							<input type="checkbox" name="jizhu" value="1" checked="checked">
+							<label>Remember username</label>
+							<a href="#">Forget password</a>
+						</div>
+						<input type="submit" name="" value="Log in" class="input_submit">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock body %}

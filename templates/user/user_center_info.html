@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block center_body %}
+
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>User center</h3>
+			<ul>
+				<li><a href="{% url "df_user:info" %}" class="active">· User information</a></li>
+				<li><a href="/user/order/1">· All orders</a></li>
+				<li><a href="{% url "df_user:site" %}">· Delivery address</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+				<div class="info_con clearfix">
+				<h3 class="common_title2">Information</h3>
+						<ul class="user_info_list">
+							<li><span>Username：</span>{{ user_name }}</li>
+							<li><span>Tel：</span>{{ user_phone }}</li>
+							<li><span>Address：</span>{{ user_address }}</li>
+						</ul>
+				</div>
+            <h3 class="common_title2">{{ explain }}</h3>
+            <div class="has_view_list">
+                <ul class="goods_type_list clearfix">
+                    {%  for good in goods_list %}
+                    <li>
+                        <a href="/{{ good.id }}/"><img src="{{ MEDIA_URL }}{{ good.gpic }}"></a>
+                        <h4><a href="/{{ good.id }}/">{{ good.gtitle }}</a></h4>
+                        <div class="operate">
+                            <span class="prize">￥{{ good.gprice }}</span>
+                            <span class="unit">{{ good.gprice }}/{{ good.gunit }}</span>
+                            <a href="/cart/add{{ good.id }}_1/" class="add_goods" title="Add to cart"></a>
+                        </div>
+                    </li>
+                    {% endfor %}
+			</ul>
+            </div>
+		</div>
+	</div>
+{% endblock center_body %}

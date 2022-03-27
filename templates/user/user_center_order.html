@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block center_body %}
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul>
+				<li><a href="{% url "df_user:info" %}">· Personal information</a></li>
+				<li><a href="{% url "df_user:order" 1 %}" class="active">· All orders</a></li>
+				<li><a href="{% url "df_user:site" %}">· Delivery address</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+				<h3 class="common_title2">All orders</h3>
+                {% for orderinfo in page %}
+				<ul class="order_list_th w978 clearfix">
+					<li class="col01">{{ orderinfo.odate|date }}</li>
+					<li class="col02">Order No：{{ orderinfo.oid }}</li>
+					<li class="col02 stress">Has paid</li>
+				</ul>
+
+				<table class="order_list_table w980">
+					<tbody>
+						<tr>
+							<td width="55%">
+                                {% for order_detail in orderinfo.orderdetailinfo_set.all %}
+								<ul class="order_goods_list clearfix">					
+									<li class="col01"><img src="{{ MEDIA_URL }}{{ order_detail.goods.gpic }}"></li>
+                                    <li class="col02">{{ order_detail.goods.gtitle }}<em class="good_price">{{ order_detail.goods.gprice }}</em>元/<em>{{ order_detail.goods.gunit }}</em></li>
+									<li class="col03">{{ order_detail.count }}piece</li>
+									<li class="col04">101.80 SEK </li>
+								</ul>
+                                {% endfor %}
+							</td>
+							<td width="15%">{{ orderinfo.ototal }} SEK</td>
+							<td width="15%">Has paid</td>
+							<td width="15%"><a href="#" class="oper_btn">Check logistics </a></td>
+						</tr>
+					</tbody>
+				</table>
+			    {% endfor %}
+
+
+				<div class="pagenation">
+                    {% if page.has_previous %}
+					    <a href="{% url "df_user:order" page.previous_page_number %}">Previous</a>
+                    {% endif %}
+
+                    {% for index in paginator.page_range %}
+                        {% if index == page.number %}
+                            <a href="{% url "df_user:order" index %}" class="active">{{ index }}</a>
+                        {% else %}
+                            <a href="{% url "df_user:order" index %}">{{ index }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page.has_next %}
+					    <a href="{% url "df_user:order" page.next_page_number %}">Next></a>
+                    {% endif %}
+				</div>
+		</div>
+	</div>
+
+    <script type="text/javascript">
+    $(function () {
+        $('.col04').each(function () {
+            count = $(this).prev().text();
+            price = $(this).prev().prev().find('.good_price').text();
+            $(this).html(parseFloat(count,2)*parseFloat(price,2)+'SEK');
+            }
+
+        )
+        }
+    )
+
+    </script>
+
+{% endblock center_body %}
