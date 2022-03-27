@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script>
+    $(function () {
+        $('.col07').each(function () {
+            count = $(this).prev().text();
+            price = $(this).prev().prev().text();
+            $(this).html(parseFloat(count,2)*parseFloat(price,2)+'元')
+        })
+    })
+    </script>
+
+{% endblock %}
+
+{% block center_body %}
+	
+	<h3 class="common_title">Comfirm delivery address</h3>
+
+	<div class="common_list_con clearfix">
+		<dl>
+			<dt>Deliver to：</dt>
+			<span><input type="radio" name="" checked="checked"></span>
+            Current address：<span class="user_info_check">{{ user.uaddress }}</span>
+            Recipient：<span class="user_info_check">{{ user.ushou }} </span>
+            Tel：<span class="user_info_check">{{ user.uphone }}</span>
+		</dl>
+		<a href="{% url "df_user:site" %}" class="edit_site">Edit delivery address</a>
+
+	</div>
+	
+	<h3 class="common_title">Payment</h3>
+	<div class="common_list_con clearfix">
+		<div class="pay_style_con clearfix">
+			<input type="radio" name="pay_style" checked>
+			<label class="cash">Klarna</label>
+			<input type="radio" name="pay_style">
+			<label class="weixin">Swish</label>
+			<input type="radio" name="pay_style">
+			<label class="zhifubao"></label>
+			<input type="radio" name="pay_style">
+			<label class="bank">Pay with bankcard</label>
+		</div>
+	</div>
+
+	<h3 class="common_title">Commodity list</h3>
+	
+	<div class="common_list_con clearfix">
+		<ul class="goods_list_th clearfix">
+			<li class="col01">Commodity name </li>
+			<li class="col02">Commodity unit</li>
+			<li class="col03">Commodity price</li>
+			<li class="col04">Amount</li>
+			<li class="col05">Subtotal</li>
+		</ul>
+        {% for cart in carts %}
+        <ul class="goods_list_td clearfix" id="{{ cart.id }}">
+			<li class="col01">{{ forloop.counter }}</li>
+			<li class="col02"><img src="{{ MEDIA_URL }}{{ cart.goods.gpic }}"></li>
+			<li class="col03">{{ cart.goods.gtitle }}</li>
+			<li class="col04">{{ cart.goods.gunit }}</li>
+			<li class="col05">{{ cart.goods.gprice }}</li>
+			<li class="col06">{{ cart.count }}</li>
+			<li class="col07">53.90SEK</li>
+        </ul>
+        {% endfor %}
+
+	</div>
+
+	<h3 class="common_title">Total price</h3>
+
+	<div class="common_list_con clearfix">
+		<div class="settle_con">
+			<div class="total_goods_count">Total<em>{{ carts|length }}</em>amount of commodities，Total price <b>{{ total_price }}</b></div>
+			<div class="transit">Freight：<b>{{ trans_cost }}SEK</b></div>
+			<div class="total_pay">Total：<b>{{ total_trans_price }}</b></div>
+		</div>
+	</div>
+
+	<div class="order_submit clearfix">
+		<a href="javascript:;" id="order_btn">Submit order</a>
+	</div>	
+
+		<div class="popup_con">
+		<div class="popup">
+			<p>Success！Thank you for your payment! </p>
+		</div>
+
+		<div class="mask"></div>
+	</div>
+
+	<script type="text/javascript">
+		$('#order_btn').click(function() {
+		    $('.user_info_check').each(function () {
+		        text = $(this).text();
+				number = 0;
+		        if (text == ''){
+					number = 1;
+				}
+            });
+			if (number == 1){
+				alert('Pleaser enter valid delivery address');
+				window.location.href = '{% url "df_user:site" %}';
+			}
+
+		    //get all id and concatenate into string
+            cartids = '';
+            $('.goods_list_td').each(function () {
+               cartids = cartids + $(this).attr('id') +','
+            });
+		    cartids = cartids.substring(0,cartids.length-1);
+		    total = {{ total_trans_price }};
+		    data = {
+		            'cart_ids':cartids,
+                    'total':total,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}'
+		    };
+
+		    //send request
+            $.post('/order/push/',data,function (data) {
+                //succeed
+
+                if (data.ok == 1){
+                    localStorage.setItem('order_finish',2);
+
+                    $('.popup_con').fadeIn('fast', function() {
+
+                        setTimeout(function(){
+                            $('.popup_con').fadeOut('fast',function(){
+                                window.location.href = '{% url "df_user:order" 1 %}';
+                            });
+                        },1000)
+                    });
+                }
+                else {
+                    alert('Failed to submit order!Try later.')
+                }
+            })
+		});
+	</script>
+{% endblock center_body %}
+
