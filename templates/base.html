@@ -1,0 +1,82 @@
+{% extends 'base_foot.html' %}
+
+{% block body %}
+
+    <div class="header_con">
+		<div class="header">
+			<div class="welcome fl">Welcome to Fresh Food Store!</div>
+			<div class="fr">
+            {# check if user has logged in #}
+                {% if request.session.user_name|default:'' != '' %}
+{# default filter checks if request.session.user_name not equal to null, which means user's logging
+                    in is true #}
+
+{# class="login_info fl"#}
+
+				<div class="login_btn fl">Welcome：<em>{{ request.session.user_name }}</em>
+                    <span>|</span>
+                    <em><a href="{% url "df_user:logout" %}">Log out</a></em>
+				</div>
+                {% else %}
+				<div class="login_btn fl">
+					<a href="{% url "df_user:login" %}">Log in</a>
+					<span>|</span>
+					<a href="{% url "df_user:register" %}">Register</a>
+				</div>
+                {% endif %}
+				<div class="user_link fl">
+					<span>|</span>
+					<a href="{% url "df_user:info" %}">User center</a>
+					<span>|</span>
+					<a href="{% url "df_cart:cart" %}">My cart</a>
+					<span>|</span>
+					<a href="{% url "df_user:order" 1 %}">My order</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+    <div class="search_bar clearfix">
+		<a href="/" class="logo fl"><img src="/static/images/logo.png"></a>
+        {% if page_name == 1 %}
+            <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;{{ title }}</div>
+        {% endif %}
+		<div class="search_con fl">
+             <script>
+                $(function () {
+                    $('.input_btn').click(function () {
+                        q = $('.input_text').val();
+                        if(q==""){
+                        alert("Please enter what you want to purchase");
+                        }
+                        else{
+                            location.href = '{% url "df_goods:ordinary_search" %}?q='+q+'&page=1'
+                        }
+                    })
+                })
+
+            </script>
+			<input type="text" class="input_text fl" name="q" placeholder="Search commodity">
+			<input type="button" class="input_btn fr" name="" value="search">
+		</div>
+
+        {% if guest_cart == 1 %}
+            <div class="guest_cart fr">
+                <a href="{% url "df_cart:cart" %}" class="cart_name fl">My cart</a>
+                <div class="goods_count fl" id="show_count">{{ cart_num }}</div>
+            </div>
+        {% endif %}
+	</div>
+
+
+
+
+{% block content %}
+{% endblock content %}
+{% block center_body %}
+
+{% endblock center_body %}
+
+
+{% endblock body %}
