@@ -9,6 +9,7 @@
 - Login and Registration
 - Product browsing: Product pictures, price, type, introduction and stock information.
 - User Center: Support the update of user's personal information, delivery address and other information, add products to shopping carts, and generate orders.
+- Submit order and payment
 
 ## Setup
 **Install dependencies**: `pip install -Ur requirements.txt`
@@ -24,5 +25,7 @@ Run the following command:
 ## Screenshots
 
 ![screenshot1](screenshot/screenshot1.png)
+
 ![screenshot2](screenshot/screenshot2.png)
+
 ![screenshot3](screenshot/screenshot3.png)
