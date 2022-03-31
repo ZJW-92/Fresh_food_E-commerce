@@ -29,3 +29,9 @@ Run the following command:
 ![screenshot2](screenshots/screenshot2.png)
 
 ![screenshot3](screenshots/screenshot3.png)
+
+![screenshot1](screenshots/screenshot4.png)
+
+![screenshot2](screenshots/screenshot5.png)
+
+![screenshot3](screenshots/screenshot6.png)
